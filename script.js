@@ -35,14 +35,45 @@ function start(){
 
 function shuffle(){
     // Math.floor(Math.random() * (max - min)) + min;
-    var ran = 0;
-    var cards = [];
+    var img = 0;
+    var file = 0;
+    var nums = [];
     var valid = true;
+    var cards = ["images/Killmonger.webp", "images/M'Baku.webp", "images/Namor.webp", "images/Okoye.jpeg", "images/Ramonda.avif", "images/Shuri.jpg", "images/T'Challa.webp"]
 
-    while (cards.length != 16) {
-        var ran = Math.floor(Math.random() * (7)) + 1;
+    while (nums.length != 16) {
+        img = Math.floor(Math.random() * (7)) + 1;
 
-         for (int i = 0; i < cards.length; i++){
-            if(cards[i] == )
+         for (let i = 0; i < nums.length; i++){
+            if(nums[i] == img){
+                for (let j = i; j < nums.length; j++){
+                    if(nums[j] == img){
+                        valid = false;
+                    }
+                }
+
+            }
          }
+
+         file = Math.floor(Math.random() * (max - min)) + min;
+         if (ran == 1){
+            
+         }else if (ran == 2){
+
+         }else if (ran == 2){
+            
+         }else if (ran == 3){
+            
+         }else if (ran == 4){
+            
+         }else if (ran == 5){
+            
+         }else if (ran == 6){
+            
+         }else if (ran == 7){
+
+         }else {
+
+         }
+    }
 }
