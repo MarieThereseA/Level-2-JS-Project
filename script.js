@@ -35,6 +35,13 @@ function reset(){
     for (var i = 0; i < startdisplay.length; i++){
         startdisplay.item(i).hidden = false;
     }
+
+    card1 = null;
+    card2 = null;
+    clickCount = 0;
+    scoreCount = 0;
+
+    display();
 }
 
 function start(){
@@ -111,6 +118,10 @@ function click(btn){
         console.log("Button 1: " + src1);
         let src2 = card2.firstElementChild.firstElementChild.getAttribute("src");
         console.log("Button 2: " + src2);
+
+        if(src1.localeCompare(src2) == 0){
+            
+        }
 
         clickCount = 0;
     }else{
