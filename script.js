@@ -5,6 +5,22 @@ var card2;
 var clickCount = 0;
 var scoreCount = 0;
 
+//All the cards required for the game
+const cards = [["images/Killmonger.webp", "Killmonger"], 
+    ["images/M'Baku.webp", "M'Baku"], 
+    ["images/Namor.webp", "Namor"], 
+    ["images/Okoye.jpeg", "Okoye"], 
+    ["images/Ramonda.avif", "Ramonda"], 
+    ["images/Shuri.jpg", "Shuri"], 
+    ["images/T'Challa.webp", "T'Challa"], 
+    ["images/Nakia.avif", "Nakia"]];
+
+//Variable to keep track of which cards are placed where
+var placed = [];
+
+//Source for face down card png
+const facedown = "images/FaceDown.png";
+
 //Start & Restart Button
 const startbtn = document.getElementById("start");
 const resetbtn = document.getElementById("restart");
@@ -40,12 +56,17 @@ function reset(){
     card2 = null;
     clickCount = 0;
     scoreCount = 0;
+    placed = [];
 
-    display();
+    scoreDis.innerHTML = scoreCount;
+    const allcards = document.getElementsByClassName("polaroid");
+    for (i of allcards) {
+        i.firstElementChild.setAttribute("src", facedown);
+        i.lastElementChild.innerHTML = "";
+    }
 }
 
 function start(){
-    console.log("startbtn clicked!");
     shuffle();
 
     for (var i = 0; i < startdisplay.length; i++){
@@ -64,18 +85,9 @@ function shuffle(){
     console.log("shuffle begins!");
 
     var element = 1;
-    var placed = [];
     var valid = true;
     var card = 0;
-    var cards = [["images/Killmonger.webp", "Killmonger"], 
-    ["images/M'Baku.webp", "M'Baku"], 
-    ["images/Namor.webp", "Namor"], 
-    ["images/Okoye.jpeg", "Okoye"], 
-    ["images/Ramonda.avif", "Ramonda"], 
-    ["images/Shuri.jpg", "Shuri"], 
-    ["images/T'Challa.webp", "T'Challa"], 
-    ["images/Nakia.avif", "Nakia"]]
-
+    
     while (placed.length != 16) {
         /* generate random number from 0 - 7 for the cards */
         card = Math.floor(Math.random() * (7)) + 0;
@@ -92,14 +104,8 @@ function shuffle(){
             }
         }
 
-         /* add card # to array of chosen cards */
-        placed.push(card);
-
-        const imgElem = document.getElementById(element);
-        imgElem.setAttribute("src", cards[card][0]);
-        const capElem = document.getElementById("p" + element);
-        capElem.innerHTML = cards[card][1];
-        element++;
+         /* add card info to array of placed cards */
+        placed.push(cards[card]);
     
     }
 }
@@ -107,31 +113,68 @@ function shuffle(){
 function click(btn){
     scoreCount++;
     clickCount++;
-    display();
 
     //If two cards are flipped
     if(clickCount == 2){
-        card2 = btn;
-        //Getting source attributes to check if the two cards are the same character
-        let src1 = card1.firstElementChild.firstElementChild.getAttribute("src");
-
-        console.log("Button 1: " + src1);
-        let src2 = card2.firstElementChild.firstElementChild.getAttribute("src");
-        console.log("Button 2: " + src2);
-
-        if(src1.localeCompare(src2) == 0){
-            
-        }
-
+        card2 = btn.firstElementChild;
+        display();
+        compare();
         clickCount = 0;
     }else{
-        card1 = btn;
-        console.log("btn 1 set?: " + card1.getAttribute("class"));
+        card1 = btn.firstElementChild;
     }
+
+    display();
+}
+
+//Function to compare the two cards
+function compare(){
+    //Getting source attributes to check if the two cards are the same character
+    let src1 = card1.firstElementChild.getAttribute("src");
+    console.log("Button 1: " + src1);
+
+    let src2 = card2.firstElementChild.getAttribute("src");
+    console.log("Button 2: " + src2);
+
+    if(src1.localeCompare(src2) == 0){
+        card1.parentElement.disabled = true;
+        card2.parentElement.disabled = true;
+    }else {
+        sleep(2000).then(() => {
+            card1.firstElementChild.setAttribute("src", facedown);
+            card2.firstElementChild.setAttribute("src", facedown);
+    
+            card1.lastElementChild.innerHTML = "";
+            card2.lastElementChild.innerHTML = "";
+        });
+    
+    }
+    sleep(2500).then(() => {
+        card1 = null;
+        card2 = null;
+    });
 }
 
 //Function to update the score
 function display(){
-    console.log("display ran! Score= " + scoreCount);
+
+    if (card1 != null){
+        index1 = card1.firstElementChild.getAttribute("id");
+        
+        card1.firstElementChild.setAttribute("src", placed[index1][0]);
+        card1.lastElementChild.setAttribute.innerHTML = placed[index1][1];
+    }
+
+    if (card2 != null){
+        index2 = card2.firstElementChild.getAttribute("id");
+
+        card2.firstElementChild.setAttribute("src", placed[index2][0]);
+        card2.lastElementChild.setAttribute.innerHTML = placed[index2][1];
+    }
+
     scoreDis.innerHTML = scoreCount;
 }
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
