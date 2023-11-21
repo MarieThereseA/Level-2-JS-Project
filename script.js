@@ -204,6 +204,8 @@ function compare(){
             card2 = null;
         });
     }
+    
+    win();
 }
 
 //Function to update the score
@@ -225,6 +227,19 @@ function display(){
     scoreDis.innerHTML = scoreCount;
 }
 
+function win(){
+    var flipped = 0;
+    for (let i = 0 ; i < cardbtns.length; i++){
+        let occurence = cardbtns.item(i);
+        if (occurence.disabled == true){
+            flipped++;
+        }
+    }
+
+    if (flipped == 16){
+        alert("You won!\nCongrats!\nPress 'reset' to play again :)");
+    }
+}
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
