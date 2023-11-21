@@ -14,15 +14,6 @@ body{
         rgb(153, 0, 255) 100%);
 }
 
-div.cards{
-    margin-top: 20px;
-    display: grid;
-    gap: 100px;
-    justify-content: space-around;
-    align-content: space-around;
-    grid-template-columns: repeat(auto-fit,minmax(250px, 1fr));
-    grid-template-rows: repeat(4, 1fr);
-}
 
 h1{
     text-align: center;
@@ -44,19 +35,31 @@ button.image{
     border:transparent;
     grid-area: auto / auto / span 1 / span 1;
     width: 300px;
-    height: 200px;
+    height: 200px; 
+
 }
 
 button.image:hover{
-    width: 120%;
-    height: 120%;
+    width: 110%;
+    height: 110%;
 }
 
 img{
     width: inherit;
     height: inherit;
     border-radius: 8px;
-    object-fit: contain;
+    object-fit: cover;
+    margin: 8px auto 8px auto;
+}
+
+div.cards{
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px, 1fr));
+    grid-template-rows: repeat(4, 1fr);
+    gap: 25px;
+    justify-content: center;
+    align-content: center;
+    margin: 20px auto auto auto;
 }
 
 div.polaroid{
@@ -69,6 +72,17 @@ div.polaroid{
 }
 
 p.caption{
+    font-size: 20px;
     text-align: center;
-    padding: auto;
+    margin: auto;
 }
+
+@media (max-width: 600px){
+}
+
+@media (min-width: 601px) and (max-width: 1024px){
+}
+
+@media (min-width: 1025px) and (max-width: 1400px){
+}
+

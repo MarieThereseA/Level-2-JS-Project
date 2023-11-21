@@ -6,14 +6,14 @@ var clickCount = 0;
 var scoreCount = 0;
 
 //All the cards required for the game
-const cards = [["images/Killmonger.webp", "Killmonger"], 
-    ["images/M'Baku.webp", "M'Baku"], 
-    ["images/Namor.webp", "Namor"], 
-    ["images/Okoye.jpeg", "Okoye"], 
-    ["images/Ramonda.avif", "Ramonda"], 
+const cards = [["images/Killmonger.jpg", "Killmonger"], 
+    ["images/M'Baku.jpeg", "M'Baku"], 
+    ["images/Namor.jpg", "Namor"], 
+    ["images/Okoye.jpg", "Okoye"], 
+    ["images/Ramonda.jpeg", "Ramonda"], 
     ["images/Shuri.jpg", "Shuri"], 
-    ["images/T'Challa.webp", "T'Challa"], 
-    ["images/Nakia.avif", "Nakia"]];
+    ["images/T'Challa.jpg", "T'Challa"], 
+    ["images/Nakia.jpeg", "Nakia"]];
 
 //Variable to keep track of which cards are placed where
 var placed = [];
@@ -44,6 +44,7 @@ for (let i = 0 ; i < cardbtns.length; i++){
 }
 
 function reset(){
+    console.log("reset");
     for (var i = 0; i < gamedisplay.length; i++){
         gamedisplay.item(i).hidden = true;
     }
@@ -87,27 +88,55 @@ function shuffle(){
     var element = 1;
     var valid = true;
     var card = 0;
+    var found = 0;
+    var tempcards = cards;
     
     while (placed.length != 16) {
         /* generate random number from 0 - 7 for the cards */
-        card = Math.floor(Math.random() * (7)) + 0;
+        index = Math.floor(Math.random() * (tempcards.length)) + 0;
+        card = tempcards[index];
+        found = 0;
 
         /* if card is displayed more than twice generate different card # */
         for (let i = 0; i < placed.length; i++){
-            if(placed[i] == card){
-                for (let j = i; j < placed.length; j++){
-                    if(placed[j] == card){
-                        valid = false;
-                    }
+            if (placed[i] != null){
+                if(placed[i][1].localeCompare(card[1]) == 0){
+                    found++;
                 }
 
             }
         }
 
+        if (found >= 2){
+            valid = false;
+            tempcards.splice(index,1);
+        }
+
+        while (!valid){
+            index = Math.floor(Math.random() * (tempcards.length)) + 0;
+            valid = true;
+            found = 0;
+            card = cards[index];
+
+            for (let i = 0; i < placed.length; i++){
+                if (placed[i] != null){
+                    if(placed[i][1].localeCompare(card[1]) == 0){
+                        found++;
+                    }
+                }
+            }
+            if (found >= 2){
+                tempcards.splice(index,1);
+                valid = false;
+            }
+
+        }
+
          /* add card info to array of placed cards */
-        placed.push(cards[card]);
+        placed.push(card);
     
     }
+    console.info(placed);
 }
 
 function click(btn){
@@ -124,7 +153,8 @@ function click(btn){
         card1 = btn.firstElementChild;
     }
 
-    display();
+    console.log("click count: "+ clickCount);
+    display(); 
 }
 
 //Function to compare the two cards
@@ -140,41 +170,59 @@ function compare(){
         card1.parentElement.disabled = true;
         card2.parentElement.disabled = true;
     }else {
-        sleep(2000).then(() => {
+        var flipped = [];
+        for (let i = 0 ; i < cardbtns.length; i++){
+            let occurence = cardbtns.item(i);
+            if (occurence.disabled != true){
+                flipped.push(occurence);
+                if (occurence != card1.parentElement || occurence != card2.parentElement){
+                    occurence.disabled = true;
+                }
+            }
+        }
+
+        sleep(1500).then(() => {
             card1.firstElementChild.setAttribute("src", facedown);
             card2.firstElementChild.setAttribute("src", facedown);
     
             card1.lastElementChild.innerHTML = "";
             card2.lastElementChild.innerHTML = "";
+
+            for (let i = 0; i < flipped.length; i++){
+                flipped[i].disabled = false;
+            }
         });
     
     }
-    sleep(2500).then(() => {
-        card1 = null;
-        card2 = null;
-    });
+    if (src1.localeCompare(src2) != 0){
+        sleep(1500).then(() => {
+            console.log("sleep");
+            card1 = null;
+            card2 = null;
+        });
+    }
 }
 
 //Function to update the score
 function display(){
 
-    if (card1 != null){
+    if (clickCount == 1 && card1 != null ){
         index1 = card1.firstElementChild.getAttribute("id");
         
         card1.firstElementChild.setAttribute("src", placed[index1][0]);
-        card1.lastElementChild.setAttribute.innerHTML = placed[index1][1];
+        card1.lastElementChild.innerHTML = placed[index1][1];
+    }else{
+        if (card2 != null){
+            index2 = card2.firstElementChild.getAttribute("id");
+    
+            card2.firstElementChild.setAttribute("src", placed[index2][0]);
+            card2.lastElementChild.innerHTML = placed[index2][1];
+        }
     }
-
-    if (card2 != null){
-        index2 = card2.firstElementChild.getAttribute("id");
-
-        card2.firstElementChild.setAttribute("src", placed[index2][0]);
-        card2.lastElementChild.setAttribute.innerHTML = placed[index2][1];
-    }
-
     scoreDis.innerHTML = scoreCount;
 }
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+}
+
