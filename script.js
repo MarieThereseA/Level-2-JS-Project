@@ -172,6 +172,7 @@ function compare(){
     if(src1.localeCompare(src2) == 0){
         card1.parentElement.disabled = true;
         card2.parentElement.disabled = true;
+        win();
     }else {
         var flipped = [];
         for (let i = 0 ; i < cardbtns.length; i++){
@@ -204,8 +205,8 @@ function compare(){
             card2 = null;
         });
     }
+
     
-    win();
 }
 
 //Function to update the score
