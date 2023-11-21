@@ -44,6 +44,7 @@ for (let i = 0 ; i < cardbtns.length; i++){
 }
 
 function reset(){
+    /*
     console.log("reset");
     for (var i = 0; i < gamedisplay.length; i++){
         gamedisplay.item(i).hidden = true;
@@ -65,6 +66,8 @@ function reset(){
         i.firstElementChild.setAttribute("src", facedown);
         i.lastElementChild.innerHTML = "";
     }
+    */
+   location.reload();
 }
 
 function start(){
